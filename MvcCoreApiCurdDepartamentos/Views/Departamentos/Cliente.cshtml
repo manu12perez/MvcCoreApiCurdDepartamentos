@@ -1,0 +1,81 @@
+﻿@section Scripts{
+	<script src="~/js/serviceapidepartamentos.js"></script>
+	<script>
+		// let url = "https://apicorecruddepartamentosmpb.azurewebsites.net/";
+		$(document).ready(function(){
+			loadDepartamentos();
+
+			$("#botoninsert").click(function(){
+				let id = parseInt($("#cajaid").val());
+				let nombre = $("#cajanombre").val();
+				let localidad = $("#cajalocalidad").val();
+
+				insertDepartamentoAsync(id, nombre, localidad, function(){
+					loadDepartamentos();
+				})
+			})
+
+			$("#botonupdate").click(function(){
+				let id = parseInt($("#cajaid").val());
+				let nombre = $("#cajanombre").val();
+				let localidad = $("#cajalocalidad").val();
+
+				updateDepartamentoAsync(id, nombre, localidad, function(){
+					loadDepartamentos();
+				})
+			})
+
+			$("#botondelete").click(function(){
+				let id = $("#cajaid").val();
+
+				deleteDepartamentoAsync(id, function(){
+					loadDepartamentos();
+				})
+			})
+		})
+
+		function loadDepartamentos(){
+			getDepartamentosAsync(function(data) {
+				var html = "";
+				$.each(data, function(index, dept){
+					html += "<tr>";
+					html += "<td>" + dept.idDepartamento + "</td>";
+					html += "<td>" + dept.nombre + "</td>";
+					html += "<td>" + dept.localidad + "</td>";
+					html += "</tr>";
+				})
+				$("#tabladepartamentos tbody").html(html);
+			})			
+		}
+	</script>
+}
+
+<h1>Cliente Api Crud Departamentos</h1>
+
+<form>
+	<label>Id Departamento</label>
+	<input type="text" id="cajaid" class="form-control" />
+	<label>Nombre</label>
+	<input type="text" id="cajanombre" class="form-control" />
+	<label>Localidad</label>
+	<input type="text" id="cajalocalidad" class="form-control" />
+	<button type="button" class="btn btn-success" id="botoninsert">
+		Insertar
+	</button>
+	<button type="button" class="btn btn-warning" id="botonupdate">
+		Modificar
+	</button>
+	<button type="button" class="btn btn-danger" id="botondelete">
+		Eliminar
+	</button>
+</form>
+<table class="table table-striped" id="tabladepartamentos">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Nombre</th>
+			<th>Localidad</th>
+		</tr>
+	</thead>
+	<tbody></tbody>
+</table>
